@@ -4,6 +4,7 @@
 
 #include "stdint.h"
 #include <atomic>
+#include <list>
 
 //TODO: work in progress
 
@@ -63,6 +64,10 @@ public:
   /// @return true iff removal was successful (i.e. stack was not empty)
   /// value is only valid if the function returns true
   bool pop(index_t &value);
+
+  /// @brief multi pop ensures consecutive elements, in contrast to concurrently calling single element pops
+  // experimental
+  std::list<index_t> multipop(index_t count);
 
   /// @brief check whether the stack is empty
   /// @return true iff the stack is empty

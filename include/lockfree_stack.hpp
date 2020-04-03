@@ -3,13 +3,14 @@
 
 #include "index_stack.hpp"
 #include <optional>
+#include <vector>
 
 //TODO: experimental, tests and proof of algorithmic correctness are missing
 //since it was just an afternoons thought there surely will be correctness issues:-)
 
 /// @brief implements a lock free stack (i.e. container with LIFO order) of elements of type T
 /// with Capacity
-template <typename T, uint64_t Capacity>
+template <typename T, uint32_t Capacity>
 class LockFreeStack
 {
 public:
@@ -24,7 +25,7 @@ public:
   LockFreeStack &operator=(LockFreeStack &&) = delete;
 
   /// @brief returns the capacity
-  constexpr uint64_t capacity() noexcept;
+  constexpr uint32_t capacity() noexcept;
 
   /// @brief tries to insert value in LIFO order
   /// @return true if insertion was successful (i.e. stack was not full during push), false otherwise
@@ -38,12 +39,17 @@ public:
   /// @return value if removal was successful, empty optional otherwise
   std::optional<T> pop() noexcept;
 
+  /// @brief multi pop ensures consecutive elements, in contrast to concurrently calling single element pops
+  //experimental, think about suitable overload signature
+  std::vector<T> multipop(index_t count);
+
   /// @brief check whether the stack is empty
   /// @return true if the stack is empty
   /// note that if the queue is used concurrently it might
   /// not be empty anymore after the call
   ///  (but it was at some point during the call)
-  bool empty() noexcept;
+  bool
+  empty() noexcept;
 
 private:
   using byte_t = uint8_t;

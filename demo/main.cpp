@@ -53,19 +53,51 @@ int main(void)
         }
     }
 
-    std::cout << "**************" << std::endl;
-    LockFreeStack<int, 4> stack;
-    stack.try_push(1ll);
-    stack.try_push(2ll);
-    stack.try_push(3ll);
-
-    while (true)
     {
-        auto popped = stack.pop();
-        if (!popped)
-            break;
-        std::cout << "popped " << *popped << std::endl;
+        std::cout << "**************" << std::endl;
+        LockFreeStack<int, 4> stack;
+        stack.try_push(1);
+        stack.try_push(2);
+        stack.try_push(3);
+
+        while (true)
+        {
+            auto popped = stack.pop();
+            if (!popped)
+                break;
+            std::cout << "popped " << *popped << std::endl;
+        }
     }
 
+    {
+        std::cout << "**************" << std::endl;
+        LockFreeStack<int, 8> stack;
+        for (int i = 1; i <= 8; ++i)
+        {
+            stack.try_push(i);
+        }
+
+        auto popped = stack.multipop(3);
+        std::cout << "\nmultipop 3 elements: ";
+        for (auto &element : popped)
+        {
+            std::cout << element << " ";
+        }
+
+        popped = stack.multipop(3);
+        std::cout << "\nmultipop 3 elements: ";
+        for (auto &element : popped)
+        {
+            std::cout << element << " ";
+        }
+
+        popped = stack.multipop(3);
+        std::cout << "\nmultipop 3 elements: ";
+        for (auto &element : popped)
+        {
+            std::cout << element << " ";
+        }
+        std::cout << std::endl;
+    }
     return 0;
 }
